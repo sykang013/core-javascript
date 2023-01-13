@@ -6,13 +6,9 @@ import {
   getNode,
   getRandom,
   insertLast,
+  isNumericString,
 } from "./lib/index.js";
 import { jujeobData } from "./data/data.js";
-
-function isNumericString(data) {
-  data = Number(data);
-  return !isNaN(data);
-}
 
 //id는 쿼리셀렉터로 잡지 않아도 잡힌다. but 하면 안됨.<=이해 잘 못함
 ////야무쌤 온라인 강의 - 문서 객체에 접근하는 방법 첫번째 동영상 보면됨. (id로 잡히는 방법)
