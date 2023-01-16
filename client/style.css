@@ -1,7 +1,6 @@
-h1{
+h1 {
   color: white;
 }
-
 
 body {
   display: flex;
@@ -9,9 +8,9 @@ body {
   align-items: center;
   min-height: 100vh;
   margin: 0;
-  font: 1.3rem/1.5 'Pretendard', sans-serif;
+  font: 1.3rem/1.5 "Pretendard", sans-serif;
   background: #151119;
-  
+
   background-size: cover;
 }
 
@@ -29,50 +28,52 @@ hr {
   display: none !important;
 }
 
-
-
-
-.logo{
+.logo {
   position: relative;
   z-index: 10;
 }
-.star{
+.star {
   position: absolute;
-  
+
   transform: scale(1.5);
 }
 
-.right-star{
+.right-star {
   right: 56px;
   top: 10px;
 }
 
-.right-star img{opacity:0; animation:star 7s infinite}
-.left-star img{opacity:0; animation:star 7s 3s infinite}
+.right-star img {
+  opacity: 0;
+  animation: star 7s infinite;
+}
+.left-star img {
+  opacity: 0;
+  animation: star 7s 3s infinite;
+}
 
-.left-star{
+.left-star {
   left: 13px;
   top: 137px;
 }
 
-
 @keyframes star {
-  0%{
+  0% {
     opacity: 0;
   }
-  70%{
-    transform:rotate(0);
+  70% {
+    transform: rotate(0);
     opacity: 0;
   }
-  75%{
+  75% {
     opacity: 1;
   }
-  80%{
-    transform:rotate(100deg);
+  80% {
+    transform: rotate(100deg);
     opacity: 0;
   }
-  100%{
-    transform:rotate(100deg);
+  100% {
+    transform: rotate(100deg);
     opacity: 0;
   }
 }
@@ -120,21 +121,21 @@ hr {
   -moz-text-fill-color: transparent;
 }
 
-.bg{
+.bg {
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
 
-  background: url("../assets/background.png")no-repeat center;
+  background: url("../assets/background.png") no-repeat center;
   background-size: cover;
   animation: scale 30s infinite linear alternate;
 }
 
 @keyframes scale {
-  to{
-    transform:scale(1.5)
+  to {
+    transform: scale(1.5);
   }
 }
 #RecordCouter {
@@ -145,7 +146,7 @@ hr {
   max-width: 480px;
   padding: 44px 60px 40px;
   text-align: center;
-  
+
   background-size: cover;
   transition: all 0.6s ease-in-out;
   gap: 24px;
@@ -167,17 +168,14 @@ hr {
   justify-content: space-evenly;
   margin-top: 80px;
   gap: 1px;
-  
 }
-
-
 
 .buttonGroup button {
   cursor: pointer;
   border-radius: 8px;
   flex: 1 1 calc(100% / 3);
   position: relative;
-  
+
   border: 1px solid #8c69ff;
   padding: 12px 15px;
   font-size: 16px;
@@ -188,10 +186,9 @@ hr {
   transition: box-shadow 0.3s;
 }
 
-.buttonGroup button:nth-child(2){
+.buttonGroup button:nth-child(2) {
   margin: 0 0.5rem;
 }
-
 
 .buttonGroup button:disabled {
   cursor: not-allowed;
@@ -203,9 +200,9 @@ hr {
 }
 
 .buttonGroup button:hover,
-.buttonGroup button:focus-visible{
+.buttonGroup button:focus-visible {
   box-shadow: inset 0 0 0.1em #6987ff, 0 0 0.1em #6987ff;
-  outline:none;
+  outline: none;
 }
 .recordListWrapper {
   overflow: auto;
@@ -215,31 +212,28 @@ hr {
   max-height: 240px;
   border-radius: 0.5rem;
   border: 1px solid rgba(255, 255, 255, 0.421);
-  padding: 0 1rem 1rem ;
+  padding: 0 1rem 1rem;
   margin-top: 1.5rem;
-  background:#36506c3d;
+  background: #36506c3d;
   position: relative;
 }
 
 .recordListWrapper::-webkit-scrollbar {
   width: 5px;
   background-color: transparent; /* 또는 트랙에 추가한다 */
-  padding:3px;
+  padding: 3px;
 }
 
 /* 썸(thumb) 추가 */
 .recordListWrapper::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.551);
   border-radius: 3px;
-  
 }
 
 .recordList {
   width: 100%;
   margin-top: 12px;
   border-collapse: collapse;
-  
-  
 }
 
 .recordList thead {
@@ -249,7 +243,7 @@ hr {
   backdrop-filter: blur(3px);
 }
 
-.recordList tbody tr:last-child{
+.recordList tbody tr:last-child {
   width: 100%;
   background: url("../assets/back_light.png") no-repeat center;
   background-size: contain;
@@ -265,14 +259,19 @@ hr {
   color: #fff;
 }
 
-.line{
+.line {
   width: 90%;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   top: 55px;
   height: 1px;
-  background: linear-gradient(to left, rgba(255, 255, 255, 0), rgb(255, 255, 255), rgba(255, 255, 255, 0));
+  background: linear-gradient(
+    to left,
+    rgba(255, 255, 255, 0),
+    rgb(255, 255, 255),
+    rgba(255, 255, 255, 0)
+  );
 }
 
 .recordList th,
@@ -281,49 +280,74 @@ hr {
   color: #fff;
 }
 
-
-
 #diceContainer {
   margin: 0 auto;
-  width:200px;
-  height:200px;
-  perspective:600px;
+  width: 200px;
+  height: 200px;
+  perspective: 600px;
   transform: scale(0.8);
-
 }
 
 #cube {
-  position:relative;
+  position: relative;
   transform-style: preserve-3d;
   width: 100%;
   height: 100%;
   transform: translateZ(-100px);
-  
 }
-
 
 #cube div {
-  border:1px solid #ccc;
-  border-radius:30px;
-  width:198px;
-  height:198px;
-  position:absolute;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+  width: 198px;
+  height: 198px;
+  position: absolute;
   background-image: url(https://1.bp.blogspot.com/-8oHADm0XlWY/UV72I6qYX_I/AAAAAAAAD8U/83sdKrWjjRg/s1600/Dice.png);
-  background-repeat:no-repeat;
+  background-repeat: no-repeat;
   filter: hue-rotate(33deg);
-  opacity:.75;
+  opacity: 0.75;
 }
 
-.front  { transform: rotateY(   0deg ) translateZ( 100px ); background-position: -12px -12px; }
-.back   { transform: rotateX( 180deg ) translateZ( 100px ); background-position: -463px -239px; }
-.right  { transform: rotateY(  90deg ) translateZ( 100px ); background-position: -236px -12px; }
-.left   { transform: rotateY( -90deg ) translateZ( 100px ); background-position: -241px -235px; }
-.top    { transform: rotateX(  90deg ) translateZ( 100px ); background-position: -459px -12px; }
-.bottom { transform: rotateX( -90deg ) translateZ( 100px ); background-position: -12px -235px; }
+.front {
+  transform: rotateY(0deg) translateZ(100px);
+  background-position: -12px -12px;
+}
+.back {
+  transform: rotateX(180deg) translateZ(100px);
+  background-position: -463px -239px;
+}
+.right {
+  transform: rotateY(90deg) translateZ(100px);
+  background-position: -236px -12px;
+}
+.left {
+  transform: rotateY(-90deg) translateZ(100px);
+  background-position: -241px -235px;
+}
+.top {
+  transform: rotateX(90deg) translateZ(100px);
+  background-position: -459px -12px;
+}
+.bottom {
+  transform: rotateX(-90deg) translateZ(100px);
+  background-position: -12px -235px;
+}
 
-#cube.show1 { transform: translateZ( -100px ) rotateY(    0deg ); }
-#cube.show2 { transform: translateZ( -100px ) rotateX( -180deg ); }
-#cube.show3 { transform: translateZ( -100px ) rotateY(  -90deg ); }
-#cube.show4 { transform: translateZ( -100px ) rotateY(   90deg ); }
-#cube.show5 { transform: translateZ( -100px ) rotateX(  -90deg ); }
-#cube.show6 { transform: translateZ( -100px ) rotateX(   90deg ); }
+#cube.show1 {
+  transform: translateZ(-100px) rotateY(0deg);
+}
+#cube.show2 {
+  transform: translateZ(-100px) rotateX(-180deg);
+}
+#cube.show3 {
+  transform: translateZ(-100px) rotateY(-90deg);
+}
+#cube.show4 {
+  transform: translateZ(-100px) rotateY(90deg);
+}
+#cube.show5 {
+  transform: translateZ(-100px) rotateX(-90deg);
+}
+#cube.show6 {
+  transform: translateZ(-100px) rotateX(90deg);
+}
