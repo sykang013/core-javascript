@@ -5,10 +5,11 @@ import { isElement } from "../utils/typeOf.js";
 ////타입을 강제할 수는 없지만, 유틸함수를 어떻게 써야하는지 기능을 명시해줄 수 있다.
 ////타입을 강제하는 것이 TypeScript.
 ////JSDoc을 잘 쓰면 문서로도 내보낼 수 있다.
+
 /**
  * @function isElement checkElement
  * @param {HTMLElement} node
- * @return set disabled
+ * @returns set disabled
  */
 
 export function disableElement(node) {
