@@ -4,6 +4,7 @@ import {
   enableElement,
   getNode,
   getNodes,
+  insertLast,
   visibleElement,
   invisibleElement,
 } from "./lib/index.js";
@@ -33,7 +34,17 @@ const [rollingDiceButton, recordButton, resetButton] = getNodes(
 
 const recordListWrapper = getNode(".recordListWrapper");
 
-function renderRecordListItem() {}
+function renderRecordListItem() {
+  let template = /* html */ `
+    <tr>
+      <td>0</td>
+      <td>5</td>
+      <td>5</td>
+    </tr>
+  `;
+
+  insertLast(".recordListWrapper tbody", template);
+}
 
 /* -------------------------------------------------------------------------- */
 /* event                                                                      */
@@ -63,7 +74,6 @@ const handleRollingDice = (() => {
 
 const handleRecord = () => {
   visibleElement(recordListWrapper);
-
   renderRecordListItem();
 };
 
