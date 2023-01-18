@@ -55,12 +55,19 @@ const defaultOptions = {
   errorMessage: "알 수 없는 오류가 발생했습니다.",
 };
 
-function delayP(options = {}) {
+export function delayP(options = {}) {
   //defaultOptions
   let config = { ...defaultOptions }; //얕은 복사
+
+  if (isNumber(options)) {
+    config.timeout = options;
+  }
+
   //객체 합성 mixin 이건 매우 많이 쓰므로 알아두어야한다.
-  ////() 안 순서가 중요하다. doptions 처럼 뒤에 있는 애가 덮어씌워지는것
-  config = { ...config, ...options };
+  if (isObject(options)) {
+    ////() 안 순서가 중요하다. options 처럼 뒤에 있는 애가 덮어씌워지는것
+    config = { ...config, ...options };
+  }
 
   const { shouldReject, data, errorMessage, timeout } = config;
 
@@ -70,14 +77,67 @@ function delayP(options = {}) {
     }, timeout);
   });
 }
+//중요한것은 delayP() 했을 때 반환되는 값은 프라미스(객체) 라는 것이다.
 
-delayP({
+/*delayP({
   data: "안녕",
 }).then((res) => {
   console.log(res); // 진짜 성공
 });
+*/
 
 /*//프라미스는 값을 내뱉기 때문에 계속 이어서 쓸 수 있다. (프라미스 체이닝)
 delayP()
 .then(res=> console.log(res));
 .catch(err=> console.log(err));*/
+
+/* ------------------------------ async, await ------------------------------ */
+//async: 일반함수를 promise를 반환하는 함수로 만든다.
+//await : 1. promise가 반환하는 result를 가져오기
+//        2. 코드 실행 흐름 제어
+//           -.파싱 순서를 제어하여 원치 않는 에러가 발생하는 것을 막아줄 수 있다.
+
+//일반함수 앞에 async를 붙이면 promise를 반환한다.
+async function delayA() {
+  return "완료"; //promise 안의 [[promiseResult]]에는 "완료" 가 담긴다.
+}
+
+let result = await delayA(); //await은 promise가 반환하는 result값 가져옴. await은 promise 앞에 쓸 수 있다.
+
+/*
+//async 없이는 아래와 같이 promise를 생성하고 .then을 쓰는 등 여러 공정을 거쳐야 한다.
+function delayA(){
+  return new Promise(resolve, reject) => {
+    resolve('완료');
+  }
+}
+
+let result = delayA().then()
+console.log(result);
+*/
+
+/* ------------------------------ try catch 예제 ------------------------------ */
+
+async function 라면끓이기() {
+  try {
+    await delayP();
+    first.style.top = "-100px";
+
+    await delayP();
+    first.style.transform = "rotate(360deg)";
+
+    await delayP();
+    first.style.top = "0px";
+
+    await delayP();
+    console.log("계란넣기");
+
+    // throw new Error('계란 껍질이 들어가버렸다!');
+    await delayP();
+    console.log("그릇에담기");
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// 라면끓이기()

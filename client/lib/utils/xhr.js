@@ -1,8 +1,3 @@
-//단순확인) html과 잘 연결되었는지 확인
-//console.log("hit");
-
-//ajax engine에는 xhr, fetch가 있으며 현재는 xhr을 다루는 법 중
-
 /*
 readyState
 0 : uninitialized //초기화
@@ -12,8 +7,94 @@ readyState
 4 : complete //완료
 */
 
+import { typeError } from "../error/typeError.js";
+
 /* -------------------------------------------------------------------------- */
-/*                                     실습                                     */
+/*                           프라미스 promise API_230118                        */
+/* -------------------------------------------------------------------------- */
+
+const defaultOptions = {
+  url: "",
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+  },
+  body: null,
+};
+
+export function xhrPromise(options = {}) {
+  const xhr = new XMLHttpRequest();
+
+  //여기서 바로 구조분해 할당
+  //빈 객체를 앞에 써줘야 새로운 객체를 만들어주는것이다. 앞에 빈 객체가 없으면 defaultOptions가 덮어씌워짐
+  const { method, url, body, headers } = Object.assign(
+    {},
+    defaultOptions,
+    options
+  );
+
+  if (!url) typeError("서버와 통신할 url 인자는 반드시 필요합니다.");
+
+  xhr.open(method, url);
+
+  xhr.send(body ? JSON.stringify(body) : null);
+
+  return new Promise((resolve, reject) => {
+    //실행자 안에 xhr.애드이벤트 리스너를 거는것
+    xhr.addEventListener("readystatechange", () => {
+      //구조분해 할당으로 원하는것 가져오기
+      const { status, readyState, response } = xhr;
+      //만약 status가 200보다 크거나 400보다 작으면 통과
+      if (status >= 200 && status < 400) {
+        //readystate의 값이 4가 맞을 때
+        if (readyState === 4) {
+          resolve(JSON.parse(response)); //객체화 시켜서 엔진으로 보내기 위해 parge
+        }
+      } else {
+        reject("에러입니다.");
+      }
+    });
+  });
+}
+
+xhrPromise.get = (url) => {
+  return xhrPromise({
+    url,
+  });
+};
+
+xhrPromise.post = (url, body) => {
+  return xhrPromise({
+    url,
+    body,
+    method: "POST",
+  });
+};
+
+xhrPromise.put = (url, body) => {
+  return xhrPromise({
+    url,
+    body,
+    method: "PUT",
+  });
+};
+
+xhrPromise.delete = (url) => {
+  return xhrPromise({
+    url,
+    method: "DELETE",
+  });
+};
+
+//resolve 자체를 호출하면 .then을 쓸 수 있다.
+//함수 자체가 promise를 내보내니 promise객체가 나감. 그 다음에 '내가 어떻게 처리할것이다'를 할 수 있다.
+//통신이 완료된 값을 가져오고 싶은것을, 제이슨 파싱을 통해 가져온다.
+//전달할 방법이 없으니  resolve에 넣어서 전달을 해주는것.
+//그럼 리졸브는 .then((res) 안에 담겨 나온다.
+
+/* -------------------------------------------------------------------------- */
+/*                               실습(콜백 방식)_230117                         */
 /* -------------------------------------------------------------------------- */
 
 //phase3.패러미터 받는 즉시 구조분해 할당
@@ -37,18 +118,16 @@ export function xhrData({
   // console.log(xhr);
   xhr.open(method, url); //비동기 통신 오픈
 
-  {
-    /*//phase4.객체를 배열로 변환시킨 후, 배열의 구조분해 할당
+  /* 
+  //phase4.객체를 배열로 변환시킨 후, 배열의 구조분해 할당
   ////Object.entries : 객체의 키와 밸류를 배열로 변환시킨다
   ////배열이므로 배열의 능력 forEach사용하여 키와 밸류로 이루어진 배열 생성 -> 배열의 구조분해 할당
   Object.entries(headers).forEach(([key, value]) => {
     xhr.setRequestHeader(key, value); //헤더 추가하는 방법은 xhr의 setRequestHeader함수 사용
   });*/
-  }
 
   //정보를 가져오기 위해서는 이벤트가 있어야 한다.
-  ////readystatechange 가 변경이 일어났을 때마다 발생하는 이벤트이다.
-  ////이벤트리스너 이름을 잘 살펴봐야함
+  ////readystatechange 가 변경이 일어났을 때마다 발생하는 이벤트이다. 이벤트리스너 이름을 잘 살펴봐야함.
   xhr.addEventListener("readystatechange", () => {
     const { status, readyState, response } = xhr; //phase1.객체 구조분해 할당
     if (status >= 200 && status < 400) {
@@ -61,26 +140,28 @@ export function xhrData({
         onSuccess(JSON.parse(response)); //JSON의 parse 함수로 문자를 객체화 시킨다.
       }
     } else {
+      // console.error();
       onFail("통신 실패");
     }
-    //단순확인)
-    // console.log(xhr.readyState);
-    // console.log(xhr.status);
   });
+  //단순확인)
+  // console.log(xhr.readyState);
+  // console.log(xhr.status);
 
   //서버에 요청 보내는것
   //데이터를 서버에 전달하기 위해서는 send 안에 넣어 전달해준다. 이떄 객체를 문자화 해주기 위해 JSON.stringify 사용
   xhr.send(JSON.stringify(body));
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                     get                                    */
-/* -------------------------------------------------------------------------- */
+/* ----------------------------------- get ---------------------------------- */
+
+/*
 //유틸함수 만들기
 ////함수도 객체가 되고 배열도 객체가 되는데, 그 안의 매서드를 재정의할 수 있다.
 ////아래는 매서드 안에서 함수를 호출한 것이므로 재귀라고는 볼 수 없다.
 ////get 하면 키값이 저장이 된 거고 거기의 밸류는 함수인것. 객체 안에 함수를 정의하는 것은 매서드.
 ////xhrData에 get 이라는 함수를 추가하고 있는 것.
+*/
 xhrData.get = (url, onSuccess, onFail) => {
   //xhr함수를 하용하는데, 인자로 위에서 정의한 것들을 가져옴
   xhrData({
@@ -90,9 +171,7 @@ xhrData.get = (url, onSuccess, onFail) => {
   });
 };
 
-/* -------------------------------------------------------------------------- */
-/*                                    post                                    */
-/* -------------------------------------------------------------------------- */
+/* ---------------------------------- post ---------------------------------- */
 //xhrData 함수(객체) 안에 post라는 키값을 만들고, 그 안의 값은 (url, onSuccess,onFail을 패러미터로 받는) 함수
 xhrData.post = (url, body, onSuccess, onFail) => {
   xhrData({
@@ -105,9 +184,7 @@ xhrData.post = (url, body, onSuccess, onFail) => {
   });
 };
 
-/* -------------------------------------------------------------------------- */
-/*                                    put 자습                              */
-/* -------------------------------------------------------------------------- */
+/* ----------------------------------- put ---------------------------------- */
 xhrData.put = (url, body, onSuccess, onFail) => {
   xhrData({
     method: "PUT",
@@ -118,20 +195,16 @@ xhrData.put = (url, body, onSuccess, onFail) => {
   });
 };
 
-/* -------------------------------------------------------------------------- */
-/*                                    delete 자습                                 */
-/* -------------------------------------------------------------------------- */
+/* --------------------------------- delete 자습 ------------------------------ */
 xhrData.delete = (url, body, onSuccess, onFail) => {
   xhrData({
     method: "DELETE",
-    // body, // 지워야할 내용 필요하니까...라고 생각했는데 해당 아이디 값만 지우면 된다고 함.
     url,
     onSuccess,
     onFail,
   });
 };
 
-console.log("왜안돼!!");
 // xhrData.post(
 //   "https://jsonplaceholder.typicode.com/users/1",
 //   (res) => {
