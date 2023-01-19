@@ -2,9 +2,9 @@
 /* global gsap */
 
 import {
-  tiger,
+  swim,
   delayP,
-  getNode,
+  getNode as $, // as $ 하면 현재파일에서 getNode를 $ 로 바꿔쓸 수 있다.
   insertLast,
   changeColor,
   renderSpinner,
@@ -22,7 +22,7 @@ import {
 //  3. 만들어진 함수 안에 createUserCard를 던지고,
 //  4. renderUserCard함수를 사용했을 때  랜더링이 잘 될 수 있도록.
 
-const userCardContainer = getNode(".user-card-inner");
+const userCardContainer = $(".user-card-inner");
 
 async function rendingUserList() {
   renderSpinner(userCardContainer);
@@ -30,11 +30,9 @@ async function rendingUserList() {
   try {
     await delayP(2000);
 
-    getNode(".loadingSpinner").remove();
+    $(".loadingSpinner").remove();
 
-    let response = await tiger.get(
-      "https://jsonplaceholder.typicode.com/users"
-    );
+    let response = await swim.get("https://jsonplaceholder.typicode.com/user");
 
     let userData = response.data;
     // userData.forEach(data=> renderUserCard(userCardContainer,data))
